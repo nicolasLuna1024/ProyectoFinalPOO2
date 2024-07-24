@@ -7,4 +7,5 @@ public class Login extends JFrame{
     private JLabel TipoUsuario;
     private JTextField textUsuario;
     private JButton ingresarButton;
+    private JPanel PanelLogin;
 }
