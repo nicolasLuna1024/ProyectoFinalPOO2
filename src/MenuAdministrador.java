@@ -5,4 +5,5 @@ public class MenuAdministrador {
     private JButton gestionarCanchasButton;
     private JButton gestionarHorariosButton;
     private JButton salirButton;
+    private JPanel MenuAdmin;
 }
