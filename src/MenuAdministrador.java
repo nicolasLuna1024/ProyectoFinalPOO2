@@ -25,6 +25,14 @@ public class MenuAdministrador extends JFrame{
 
             }
         });
+        gestionarCanchasButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MenuGestionCanchas menuGestionCanchas = new MenuGestionCanchas();
+                menuGestionCanchas.iniciarMenuGestionCanchas();
+                dispose();
+            }
+        });
     }
 
 
