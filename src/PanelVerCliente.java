@@ -44,8 +44,6 @@ public class PanelVerCliente extends JFrame {
     public void VerRegistro(){
         try{
             String cedula = textField1.getText().trim(); // Obtener la cédula ingresada
-
-
             Connection conn = conexionBase();
             String query = "SELECT * FROM Jugador WHERE cedula = ?";
             Statement stmt = conn.createStatement();
@@ -59,18 +57,13 @@ public class PanelVerCliente extends JFrame {
                 Integer Telefono = rs.getInt("telefono");
                 String FechaNacimiento = rs.getString("fechaNacimiento");
                 Double Cedula = rs.getDouble("cedula");
-
-
-
                 textAreaBuscar.append("Nombre Completo: " + Nombre + "\n");
                 textAreaBuscar.append("Correo Electronico: " + Email + "\n");
                 textAreaBuscar.append("Telefono: " + Telefono + "\n");
                 textAreaBuscar.append("Fecha de Nacimiento: " + FechaNacimiento + "\n");
                 textAreaBuscar.append("Cedula: " + Cedula + "\n");
-
             }
             conn.close();
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
