@@ -17,6 +17,7 @@ public class Login extends JFrame {
         setContentPane(PanelLogin);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 500);
+        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
 
         ingresarButton.addActionListener(new ActionListener() {
             @Override
@@ -98,6 +99,7 @@ public class Login extends JFrame {
     public void iniciarLogin() {
         setVisible(true);
         setSize(500, 500);
+        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 

@@ -14,6 +14,7 @@ public class MenuAdministrador extends JFrame{
         super("Menu Administrador");
         setContentPane(MenuAdmin);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
         setSize(500,500);
         gestionarClientesButton.addActionListener(new ActionListener() {
             @Override
@@ -32,6 +33,7 @@ public class MenuAdministrador extends JFrame{
     public void iniciarAdmin(){
         setVisible(true);
         setSize(500,500);
+        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 

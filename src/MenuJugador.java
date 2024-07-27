@@ -12,6 +12,7 @@ public class MenuJugador extends JFrame {
         setContentPane(MenuJugador);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500,500);
+        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
 
 
 
@@ -22,5 +23,6 @@ public class MenuJugador extends JFrame {
         setVisible(true);
         setSize(500,500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
     }
 }

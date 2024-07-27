@@ -21,6 +21,7 @@ public class PanelAgregarCliente extends JFrame{
         super("Agregar Cliente");
         setContentPane(panelAgregarCliente);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
         setSize(500,500);
 
         agregarButton.addActionListener(new ActionListener() {
@@ -78,6 +79,7 @@ public class PanelAgregarCliente extends JFrame{
     public void iniciarAgregarCliente(){
         setVisible(true);
         setSize(500,500);
+        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 

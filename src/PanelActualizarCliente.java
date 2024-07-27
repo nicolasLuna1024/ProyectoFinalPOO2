@@ -21,6 +21,7 @@ public class PanelActualizarCliente extends JFrame {
         setContentPane(panelActulizarCliente);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 500);
+        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
 
         buscarButton.addActionListener(new ActionListener() {
             @Override
@@ -39,6 +40,14 @@ public class PanelActualizarCliente extends JFrame {
                 }
             }
         });
+        menuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MenuAdministrador menuAdministrador = new MenuAdministrador();
+                menuAdministrador.iniciarAdmin();
+                dispose();
+            }
+        });
     }
 
     // Metodo Conexion base
@@ -54,6 +63,7 @@ public class PanelActualizarCliente extends JFrame {
         setVisible(true);
         setSize(500, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
     }
 
     // Metodo para Buscar paciente por la cedula y asi ver los datos del cliente

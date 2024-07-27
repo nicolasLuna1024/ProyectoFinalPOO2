@@ -16,6 +16,7 @@ public class MenuGestionClien extends JFrame{
         super("Gestionar Clientes");
         setContentPane(PanelGestClient);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
         setSize(500,500);
         agregarClienteButton.addActionListener(new ActionListener() {
             @Override
@@ -33,6 +34,22 @@ public class MenuGestionClien extends JFrame{
                 dispose();
             }
         });
+        verClienteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PanelVerCliente panelVerCliente = new PanelVerCliente();
+                panelVerCliente.iniciarBuscarCliente();
+                dispose();
+            }
+        });
+        eliminarClienteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PanelEliminarCLiente panelEliminarCLiente = new PanelEliminarCLiente();
+                panelEliminarCLiente.iniciarEliminarCliente();
+                dispose();
+            }
+        });
     }
 
 
@@ -41,6 +58,7 @@ public class MenuGestionClien extends JFrame{
     public void iniciarGestionClientes(){
         setVisible(true);
         setSize(500,500);
+        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
