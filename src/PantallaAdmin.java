@@ -18,9 +18,16 @@ public class PantallaAdmin extends JFrame{
     private JButton agregarButton;
     private JButton actualizarButton1;
     private JTabbedPane tabbedPane2;
+    private JTextField textIdCancha;
+    private JTextField textTipoCancha;
+    private JTextField textUbicacion;
+    private JTextField textJugadoresCancha;
+    private JTextField textPrecioCancha;
+    private JButton seleccionarUnaImagenButton;
+    private JButton insertarCanchaButton;
 
     public PantallaAdmin() {
-        super("Login");
+        super("Menu Administrador");
         setContentPane(VentanaPrincipal);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(725, 400);
@@ -70,8 +77,18 @@ public class PantallaAdmin extends JFrame{
                 }
             }
         });
+        insertarCanchaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    IngresarCancha();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
     }
-    // Metodo Ingresar
+    // Metodo Ingresar datos de Cliente
     public void InsertarDatos() throws SQLException {
         String nombreCompleto = textNombreCompleto.getText();
         String email = textEmail.getText();
@@ -224,6 +241,33 @@ public class PantallaAdmin extends JFrame{
 
         pstmt.close();
         conecta.close();
+    }
+    // Metodo Ingresar datos de Cancha
+    public void IngresarCancha() throws SQLException {
+        String IDcancha = textIdCancha.getText();
+        String tipoCancha = textTipoCancha.getText();
+        String ubicacion = textUbicacion.getText();
+        String numeroJugadores = textJugadoresCancha.getText();
+        String precio = textPrecioCancha.getText();
+
+
+        Connection conecta =conexionBase();
+
+        String query ="insert into Canchas(idCancha,tipo,ubicacion,numJugadores,precio) values(?,?,?,?,?)";
+        PreparedStatement pstmt = conecta.prepareStatement(query);
+        pstmt.setString(1,IDcancha);
+        pstmt.setString(2,tipoCancha);
+        pstmt.setString(3,ubicacion);
+        pstmt.setString(4,numeroJugadores);
+        pstmt.setDouble(5,Double.parseDouble(precio));
+        // ACTUALIZAR
+        int rowsAffected = pstmt.executeUpdate();
+        if (rowsAffected > 0){
+            JOptionPane.showMessageDialog(null,"REGISTRO INSERTADO CORRECTAMENTE");
+        }
+        pstmt.close();
+        conecta.close();
+
     }
 
 
