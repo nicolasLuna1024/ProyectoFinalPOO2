@@ -1,6 +1,11 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.*;
 
 public class PantallaAdmin extends JFrame{
@@ -25,12 +30,16 @@ public class PantallaAdmin extends JFrame{
     private JTextField textPrecioCancha;
     private JButton seleccionarUnaImagenButton;
     private JButton insertarCanchaButton;
+    private JTextField textField1;
+    private JLabel lblFoto;
+
+    private File selectedFile; // Para almacenar el archivo de imagen seleccionado
 
     public PantallaAdmin() {
         super("Menu Administrador");
         setContentPane(VentanaPrincipal);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(725, 400);
+        setSize(825, 550);
         setLocationRelativeTo(null);
         //Agregar
         agregarButton.addActionListener(new ActionListener() {
@@ -41,7 +50,6 @@ public class PantallaAdmin extends JFrame{
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
-
             }
         });
         //Buscar
@@ -49,7 +57,6 @@ public class PantallaAdmin extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 VerRegistro();
-
             }
         });
         //Actualizar
@@ -57,7 +64,6 @@ public class PantallaAdmin extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-
                     actualizarCliente();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
@@ -87,6 +93,62 @@ public class PantallaAdmin extends JFrame{
                 }
             }
         });
+        //Subir una Imagen
+        seleccionarUnaImagenButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser archivo = new JFileChooser();
+                int ventana = archivo.showOpenDialog(null);
+                if (ventana == JFileChooser.APPROVE_OPTION) {
+                    selectedFile = archivo.getSelectedFile();
+                    textField1.setText(String.valueOf(selectedFile));
+                    Image foto = getToolkit().getImage(textField1.getText());
+                    foto = foto.getScaledInstance(120, 120, Image.SCALE_DEFAULT);
+                    lblFoto.setIcon(new ImageIcon(foto));
+                }
+            }
+        });
+    }
+
+    // Método Ingresar datos de Cancha
+    public void IngresarCancha() throws SQLException {
+        String IDcancha = textIdCancha.getText();
+        String tipoCancha = textTipoCancha.getText();
+        String ubicacion = textUbicacion.getText();
+        String numeroJugadores = textJugadoresCancha.getText();
+        String precio = textPrecioCancha.getText();
+
+        Connection conecta = conexionBase();
+
+        String query = "INSERT INTO Canchas(idCancha, tipo, ubicacion, numJugadores, precio, imagen) VALUES(?,?,?,?,?,?)";
+        PreparedStatement pstmt = conecta.prepareStatement(query);
+        pstmt.setString(1, IDcancha);
+        pstmt.setString(2, tipoCancha);
+        pstmt.setString(3, ubicacion);
+        pstmt.setString(4, numeroJugadores);
+        pstmt.setDouble(5, Double.parseDouble(precio));
+
+        // Leer el archivo de imagen y establecerlo en el PreparedStatement
+        if (selectedFile != null) {
+            try {
+                byte[] imageBytes = Files.readAllBytes(selectedFile.toPath());
+                pstmt.setBytes(6, imageBytes);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error al leer la imagen: " + ex.getMessage());
+                return;
+            }
+        } else {
+            pstmt.setNull(6, Types.BLOB);
+        }
+
+        // Ejecutar la inserción
+        int rowsAffected = pstmt.executeUpdate();
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(null, "REGISTRO INSERTADO CORRECTAMENTE");
+        }
+        pstmt.close();
+        conecta.close();
     }
     // Metodo Ingresar datos de Cliente
     public void InsertarDatos() throws SQLException {
@@ -242,33 +304,7 @@ public class PantallaAdmin extends JFrame{
         pstmt.close();
         conecta.close();
     }
-    // Metodo Ingresar datos de Cancha
-    public void IngresarCancha() throws SQLException {
-        String IDcancha = textIdCancha.getText();
-        String tipoCancha = textTipoCancha.getText();
-        String ubicacion = textUbicacion.getText();
-        String numeroJugadores = textJugadoresCancha.getText();
-        String precio = textPrecioCancha.getText();
 
-
-        Connection conecta =conexionBase();
-
-        String query ="insert into Canchas(idCancha,tipo,ubicacion,numJugadores,precio) values(?,?,?,?,?)";
-        PreparedStatement pstmt = conecta.prepareStatement(query);
-        pstmt.setString(1,IDcancha);
-        pstmt.setString(2,tipoCancha);
-        pstmt.setString(3,ubicacion);
-        pstmt.setString(4,numeroJugadores);
-        pstmt.setDouble(5,Double.parseDouble(precio));
-        // ACTUALIZAR
-        int rowsAffected = pstmt.executeUpdate();
-        if (rowsAffected > 0){
-            JOptionPane.showMessageDialog(null,"REGISTRO INSERTADO CORRECTAMENTE");
-        }
-        pstmt.close();
-        conecta.close();
-
-    }
 
 
     // Metodo Conexion base
@@ -287,6 +323,7 @@ public class PantallaAdmin extends JFrame{
         textFechaDeNacimiento.setText("");
         textCedula.setText(""); // Limpiar la cédula ingresada también
     }
+
 
 
 
