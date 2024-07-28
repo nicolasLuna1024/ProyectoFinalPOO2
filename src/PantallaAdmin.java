@@ -3,7 +3,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.*;
@@ -32,6 +31,11 @@ public class PantallaAdmin extends JFrame{
     private JButton insertarCanchaButton;
     private JTextField textField1;
     private JLabel lblFoto;
+    private JTextField textID_cancha;
+    private JTextArea textBuscarArea;
+    private JButton buscarButton;
+    private JButton eliminarButton;
+    private JLabel lblFotoVer;
 
     private File selectedFile; // Para almacenar el archivo de imagen seleccionado
 
@@ -52,14 +56,14 @@ public class PantallaAdmin extends JFrame{
                 }
             }
         });
-        //Buscar
+        //Buscar Cliente
         buscarButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 VerRegistro();
             }
         });
-        //Actualizar
+        //Actualizar Cliente
         actualizarButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -70,7 +74,7 @@ public class PantallaAdmin extends JFrame{
                 }
             }
         });
-        //Eliminar
+        //Eliminar Cliente
         eliminarButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -83,6 +87,7 @@ public class PantallaAdmin extends JFrame{
                 }
             }
         });
+        //Insertar cancha
         insertarCanchaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -108,6 +113,95 @@ public class PantallaAdmin extends JFrame{
                 }
             }
         });
+        // Buscar Cancha con ID
+        buscarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        //Boton Buscar y Ver Cancha
+        buscarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VerCancha();
+            }
+        });
+        // Boton para Eliminar Cancha con el IdCancha
+        eliminarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                eliminarCancha();
+            }
+        });
+    }
+    // Método para Eliminar Cancha
+    public void eliminarCancha() {
+        try {
+            String idCancha = textID_cancha.getText().trim(); // Obtener el ID de la cancha
+
+            if (idCancha.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Por favor, ingrese el ID de la cancha.");
+                return;
+            }
+
+            Connection conecta = conexionBase();
+            String query = "DELETE FROM Canchas WHERE idCancha = ?";
+            PreparedStatement pstmt = conecta.prepareStatement(query);
+            pstmt.setString(1, idCancha);
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected == 0) {
+                JOptionPane.showMessageDialog(null, "CANCHA NO ENCONTRADA");
+            } else {
+                JOptionPane.showMessageDialog(null, "CANCHA ELIMINADA EXITOSAMENTE.");
+            }
+
+            pstmt.close();
+            conecta.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    // Método para Buscar Cancha
+    public void VerCancha() {
+        try {
+            String idCancha = textID_cancha.getText().trim(); // Obtener el ID de la cancha para las operaciones
+
+            Connection conn = conexionBase();
+            String query = "SELECT * FROM Canchas WHERE idCancha = ?";
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, idCancha);
+            textBuscarArea.setText("");
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                String tipoCancha = rs.getString("tipo");
+                String ubicacion = rs.getString("ubicacion");
+                int numJugadores = rs.getInt("numJugadores");
+                double precio = rs.getDouble("precio");
+                byte[] imagenBytes = rs.getBytes("imagen");
+
+                textBuscarArea.append("Tipo de Cancha: " + tipoCancha + "\n");
+                textBuscarArea.append("Ubicacion: " + ubicacion + "\n");
+                textBuscarArea.append("Numero de Jugadores admitidos: " + numJugadores + "\n");
+                textBuscarArea.append("Precio: " + precio + "\n");
+
+                if (imagenBytes != null) {
+                    ImageIcon imageIcon = new ImageIcon(imagenBytes);
+                    Image image = imageIcon.getImage();
+                    Image scaledImage = image.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+                    lblFotoVer.setIcon(new ImageIcon(scaledImage));
+                } else {
+                    lblFotoVer.setIcon(null);
+                }
+            } else {
+                textBuscarArea.append("No se encontró la cancha con el ID proporcionado.\n");
+                lblFotoVer.setIcon(null);
+            }
+            conn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // Método Ingresar datos de Cancha
