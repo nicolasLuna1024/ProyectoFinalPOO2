@@ -17,12 +17,13 @@ public class PantallaAdmin extends JFrame{
     private JButton eliminarButton1;
     private JButton agregarButton;
     private JButton actualizarButton1;
+    private JTabbedPane tabbedPane2;
 
     public PantallaAdmin() {
         super("Login");
         setContentPane(VentanaPrincipal);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 400);
+        setSize(725, 400);
         setLocationRelativeTo(null);
         //Agregar
         agregarButton.addActionListener(new ActionListener() {
