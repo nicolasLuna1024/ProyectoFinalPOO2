@@ -4,8 +4,11 @@ public class Main {
     public static void main(String[] args) {
 //        Login login = new Login();
 //        login.setVisible(true);
-        PantallaAdmin pantallaAdmin = new PantallaAdmin();
-        pantallaAdmin.setVisible(true);
+//        PantallaAdmin pantallaAdmin = new PantallaAdmin();
+//        pantallaAdmin.setVisible(true);
+
+        PantallaCliente pantallaCliente = new PantallaCliente();
+        pantallaCliente.setVisible(true);
 
     }
 }

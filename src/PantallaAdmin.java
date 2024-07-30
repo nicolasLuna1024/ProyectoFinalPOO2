@@ -272,6 +272,7 @@ public class PantallaAdmin extends JFrame{
         conecta.close();
 
     }
+    //Actualizar Cliente
     public void actualizarCliente() throws SQLException {
 
         String cedula = textCedula.getText().trim();
@@ -408,6 +409,7 @@ public class PantallaAdmin extends JFrame{
         String password = "123456";
         return DriverManager.getConnection(url, user, password);
     }
+
     // Método para limpiar los campos de texto
     private void limpiarCampos() {
         textNombreCompleto.setText("");
