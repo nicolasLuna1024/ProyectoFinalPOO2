@@ -36,6 +36,16 @@ public class PantallaAdmin extends JFrame{
     private JButton buscarButton;
     private JButton eliminarButton;
     private JLabel lblFotoVer;
+    private JTabbedPane PanelTurnos;
+    private JTextField textTurnoID;
+    private JTextField textDisponibilidadTurno;
+    private JTextField textHoraTurno;
+    private JTextField textCanchaID;
+    private JButton insertarTurnoButton;
+    private JTextArea textArea1;
+    private JTextField textTurnoIDAcciones;
+    private JButton buscarTurnoButton;
+    private JButton eliminarTurnoButton;
 
     private File selectedFile; // Para almacenar el archivo de imagen seleccionado
 
@@ -134,6 +144,135 @@ public class PantallaAdmin extends JFrame{
                 eliminarCancha();
             }
         });
+        // Boton para Insertar Turnos
+        insertarTurnoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                insertarTurnos();
+            }
+        });
+        //Metodo para Buscar Turno
+        buscarTurnoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarTurno();
+            }
+        });
+        //Metodo para Eliminar Turno
+        eliminarTurnoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                eliminarTurno();
+            }
+        });
+    }
+    //Metodo para Eliminar Turno
+    public void eliminarTurno() {
+        String turnoID = textTurnoIDAcciones.getText();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            conn = conexionBase(); // Método para conectar a la base de datos
+            String sql = "DELETE FROM Turnos WHERE IdTurnos = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, turnoID);
+
+            int rowsDeleted = stmt.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                JOptionPane.showMessageDialog(this, "TURNO ELIMINADO", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                textArea1.setText(""); // Limpiar el área de texto después de eliminar
+            } else {
+                JOptionPane.showMessageDialog(this, "NO SE ENCONTRO EL TURNO", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "ERROR AL ELIMINAR ", "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    //Metodo para Buscar Turno
+    public void buscarTurno() {
+        String turnoID = textTurnoIDAcciones.getText();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = conexionBase(); // Método para conectar a la base de datos
+            String sql = "SELECT * FROM Turnos WHERE IdTurnos = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, turnoID);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String disponibilidad = rs.getString("disponibilidad");
+                String horaTurnos = rs.getString("horaTurnos");
+                String idCancha = rs.getString("idCancha");
+
+                textArea1.setText("ID Turno: " + turnoID + "\n" +
+                        "Disponibilidad: " + disponibilidad + "\n" +
+                        "Hora Turno: " + horaTurnos + "\n" +
+                        "ID Cancha: " + idCancha);
+            } else {
+                JOptionPane.showMessageDialog(this, "NO SE ENCONTRO EL TURNO", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "ERROR AL BUSCAR EL TURNO", "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    // Metodo Insertar Turnos
+    public void insertarTurnos() {
+        String turnoID = textTurnoID.getText();
+        String disponibilidadTurno = textDisponibilidadTurno.getText();
+        String horaTurno = textHoraTurno.getText();
+        String canchaID = textCanchaID.getText();
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            conn = conexionBase(); // Método para conectar a la base de datos
+            String sql = "INSERT INTO Turnos (IdTurnos, disponibilidad, horaTurnos, idCancha) VALUES (?, ?, ?, ?)";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, turnoID);
+            stmt.setString(2, disponibilidadTurno);
+            stmt.setString(3, horaTurno);
+            stmt.setString(4, canchaID);
+
+            stmt.executeUpdate();
+            JOptionPane.showMessageDialog(this, "TURNO INSERTADO CORRECTAMENTE", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "ERROR AL INSERTAR TURNO", "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
     // Método para Eliminar Cancha
     public void eliminarCancha() {
@@ -203,6 +342,7 @@ public class PantallaAdmin extends JFrame{
             throw new RuntimeException(e);
         }
     }
+
 
     // Método Ingresar datos de Cancha
     public void IngresarCancha() throws SQLException {

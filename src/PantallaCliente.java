@@ -15,12 +15,13 @@ public class PantallaCliente extends JFrame {
     private JPanel VentanaCliente;
     private JTextField textBusqueda_idCancha;
     private JButton visualizarImagenButton;
+    private JTextField textField1;
 
     public PantallaCliente() {
         super("Menu Administrador");
         setContentPane(VentanaCliente);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(625, 325);
+        setSize(655, 325);
         setLocationRelativeTo(null);
 
         try {
@@ -64,13 +65,13 @@ public class PantallaCliente extends JFrame {
         return DriverManager.getConnection(url, user, password);
     }
 
-    // Metodo para obtener los datos de la tabla Canchas
+    // Metodo para obtener los datos de la tabla Canchas en Ver canchas
     public DefaultTableModel obtenerDatosDeCanchas(Connection conn) throws SQLException {
         String query = "SELECT idCancha, tipo, ubicacion, numJugadores, precio, imagen FROM Canchas";
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
 
-        // Crear el modelo de la tabla y establecer las columnas con títulos en mayúsculas
+        // Crear el modelo de la tabla y establecer las columnas con títulos en mayúsculas en Ver canchas
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("ID CANCHA");
         model.addColumn("TIPO");
@@ -79,7 +80,7 @@ public class PantallaCliente extends JFrame {
         model.addColumn("PRECIO");
         model.addColumn("IMAGEN");
 
-        // Iterar sobre los resultados y agregarlos al modelo
+        // Iterar sobre los resultados y agregarlos al modelo en Ver canchas
         while (rs.next()) {
             Object[] row = new Object[6];
             row[0] = rs.getString("idCancha");
@@ -96,7 +97,7 @@ public class PantallaCliente extends JFrame {
 
         return model;
     }
-    // Metodo para obtener la imagen de la cancha por ID
+    // Metodo para obtener la imagen de la cancha por ID en Ver Canchas
     public byte[] obtenerImagenDeCancha(Connection conn, String idCancha) throws SQLException {
         String query = "SELECT imagen FROM Canchas WHERE idCancha = ?";
         java.sql.PreparedStatement pstmt = conn.prepareStatement(query);
@@ -114,7 +115,7 @@ public class PantallaCliente extends JFrame {
         return imageBytes;
     }
 
-    // Metodo para mostrar la imagen
+    // Metodo para mostrar la imagen en Ver Canchas
     public void mostrarImagen(byte[] imageBytes) {
         ImageIcon imageIcon = new ImageIcon(imageBytes);
         Image image = imageIcon.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
