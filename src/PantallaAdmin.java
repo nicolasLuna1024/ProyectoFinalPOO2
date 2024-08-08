@@ -1,7 +1,10 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -46,6 +49,8 @@ public class PantallaAdmin extends JFrame{
     private JTextField textTurnoIDAcciones;
     private JButton buscarTurnoButton;
     private JButton eliminarTurnoButton;
+    private JButton cerrarSesionButton;
+    private JTable tablaVerReservas;
 
     private File selectedFile; // Para almacenar el archivo de imagen seleccionado
 
@@ -165,6 +170,22 @@ public class PantallaAdmin extends JFrame{
                 eliminarTurno();
             }
         });
+        //Boton Cerrar Cesion
+        cerrarSesionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Login login = new Login();
+                login.iniciarLogin();
+                dispose();
+            }
+        });
+        tabbedPane1.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                mostrarReservas();
+            }
+        });
     }
     //Metodo para Eliminar Turno
     public void eliminarTurno() {
@@ -197,7 +218,51 @@ public class PantallaAdmin extends JFrame{
                 e.printStackTrace();
             }
         }
+
+
     }
+    // Método para mostrar reservas en la tabla
+    public void mostrarReservas() {
+        try {
+            // Conectar a la base de datos
+            Connection conn = conexionBase();
+
+            // Consulta para obtener los registros de la tabla Reservas
+            String query = "SELECT idCancha, cedula, IdTurnos, nombreCompleto FROM Reservas";
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            ResultSet rs = pstmt.executeQuery();
+
+            // Crear el modelo de la tabla y establecer las columnas
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("ID Cancha");
+            model.addColumn("Cédula");
+            model.addColumn("ID Turnos");
+            model.addColumn("Nombre Completo");
+
+            // Iterar sobre los resultados y agregarlos al modelo
+            while (rs.next()) {
+                Object[] row = new Object[4];
+                row[0] = rs.getString("idCancha");
+                row[1] = rs.getDouble("cedula");
+                row[2] = rs.getString("IdTurnos");
+                row[3] = rs.getString("nombreCompleto");
+                model.addRow(row);
+            }
+
+            // Configurar la tabla para mostrar el modelo
+            tablaVerReservas.setModel(model);
+
+            // Cerrar conexiones
+            rs.close();
+            pstmt.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al conectar a la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 
 
     //Metodo para Buscar Turno
@@ -216,12 +281,12 @@ public class PantallaAdmin extends JFrame{
 
             if (rs.next()) {
                 String disponibilidad = rs.getString("disponibilidad");
-                String horaTurnos = rs.getString("horaTurnos");
+//                String horaTurnos = rs.getString("horaTurnos");
                 String idCancha = rs.getString("idCancha");
 
                 textArea1.setText("ID Turno: " + turnoID + "\n" +
                         "Disponibilidad: " + disponibilidad + "\n" +
-                        "Hora Turno: " + horaTurnos + "\n" +
+//                        "Hora Turno: " + horaTurnos + "\n" +
                         "ID Cancha: " + idCancha);
             } else {
                 JOptionPane.showMessageDialog(this, "NO SE ENCONTRO EL TURNO", "Error", JOptionPane.ERROR_MESSAGE);
@@ -253,12 +318,12 @@ public class PantallaAdmin extends JFrame{
 
         try {
             conn = conexionBase(); // Método para conectar a la base de datos
-            String sql = "INSERT INTO Turnos (IdTurnos, disponibilidad, horaTurnos, idCancha) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO Turnos (IdTurnos, disponibilidad, idCancha) VALUES (?, ?, ?)";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, turnoID);
             stmt.setString(2, disponibilidadTurno);
-            stmt.setString(3, horaTurno);
-            stmt.setString(4, canchaID);
+//            stmt.setString(3, horaTurno);
+            stmt.setString(3, canchaID);
 
             stmt.executeUpdate();
             JOptionPane.showMessageDialog(this, "TURNO INSERTADO CORRECTAMENTE", "Éxito", JOptionPane.INFORMATION_MESSAGE);
@@ -558,6 +623,11 @@ public class PantallaAdmin extends JFrame{
         textDireccion.setText("");
         textFechaDeNacimiento.setText("");
         textCedula.setText(""); // Limpiar la cédula ingresada también
+    }
+    // Metodo para Iniciar la Pantalla de Login
+    public void iniciarAdministrador() {
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
 

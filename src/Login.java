@@ -30,8 +30,8 @@ public class Login extends JFrame {
                 if (usuarioTipo.equals("Administrador")) {
                     try {
                         if (verificarAdministrador(nombre, pass)) {
-                            MenuAdministrador menuAdmin = new MenuAdministrador();
-                            menuAdmin.iniciarAdmin();
+                            PantallaAdmin pantallaAdmin = new PantallaAdmin();
+                            pantallaAdmin.iniciarAdministrador();
                             dispose();
                         } else {
                             JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
@@ -42,8 +42,8 @@ public class Login extends JFrame {
                 } else if (usuarioTipo.equals("Jugador")) {
                     try{
                         if (verificarJugador(nombre,pass)){
-                            MenuJugador menuJugador = new MenuJugador();
-                            menuJugador.iniciarJugador();
+                            PantallaCliente pantallaCliente = new PantallaCliente();
+                            pantallaCliente.iniciarCliente();
                             dispose();
                         }else {
                             JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
