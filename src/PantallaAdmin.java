@@ -609,11 +609,12 @@ public class PantallaAdmin extends JFrame{
 
     // Metodo Conexion base
     public Connection conexionBase() throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/GestionDeCanchas";
-        String user = "root";
-        String password = "123456";
+        String url = "jdbc:mysql://bouzyouyo2jljjoxc9jz-mysql.services.clever-cloud.com:3306/bouzyouyo2jljjoxc9jz";
+        String user = "ufo9waumpbszcslb";
+        String password = "bvSDOq9S6RO0XfHrjVeS";
         return DriverManager.getConnection(url, user, password);
     }
+
 
     // Método para limpiar los campos de texto
     private void limpiarCampos() {

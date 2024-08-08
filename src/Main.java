@@ -2,13 +2,13 @@
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-//        Login login = new Login();
-//        login.setVisible(true);
+        Login login = new Login();
+        login.setVisible(true);
 //        PantallaAdmin pantallaAdmin = new PantallaAdmin();
 //        pantallaAdmin.setVisible(true);
 
-        PantallaCliente pantallaCliente = new PantallaCliente();
-        pantallaCliente.setVisible(true);
+//        PantallaCliente pantallaCliente = new PantallaCliente();
+//        pantallaCliente.setVisible(true);
 
     }
 }

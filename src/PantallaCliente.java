@@ -26,7 +26,7 @@ public class PantallaCliente extends JFrame {
         super("Menu Administrador");
         setContentPane(VentanaCliente);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(655, 325);
+        setSize(700, 375);
         setLocationRelativeTo(null);
 
         try {
@@ -170,13 +170,14 @@ public class PantallaCliente extends JFrame {
 
 
 
-    // Metodo para conectar a la base de datos
+    // Metodo Conexion base
     public Connection conexionBase() throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/GestionDeCanchas";
-        String user = "root";
-        String password = "123456";
+        String url = "jdbc:mysql://bouzyouyo2jljjoxc9jz-mysql.services.clever-cloud.com:3306/bouzyouyo2jljjoxc9jz";
+        String user = "ufo9waumpbszcslb";
+        String password = "bvSDOq9S6RO0XfHrjVeS";
         return DriverManager.getConnection(url, user, password);
     }
+
 
     // Metodo para obtener los datos de la tabla Canchas en Ver canchas
     public DefaultTableModel obtenerDatosDeCanchas(Connection conn) throws SQLException {
